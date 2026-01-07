@@ -383,3 +383,10 @@ MIT
 ## Support
 
 For issues, questions, or contributions, see `CONTRIBUTING.md`.
+---
+
+## Note on Usage
+
+This repository is provided as a portfolio proof-of-concept demonstrating autonomous agent architecture, decision logic, and RAG patterns.
+
+It is not intended to be a drop-in production system without adaptation, configuration, and domain-specific integration.
