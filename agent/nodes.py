@@ -208,6 +208,22 @@ Compose a helpful response to the current query."""
             sources_used=state["sources_used"]
         )
 
+        # Enforce confidence thresholds
+        should_escalate_flag, escalation_reason = decision_engine.should_escalate(
+            confidence=state.get("confidence", 0.0),
+            error_occurred=False,
+            sensitive_topic=False  # Could add detection logic here
+        )
+
+        if should_escalate_flag and not state.get("escalated"):
+            state["escalated"] = True
+            state["escalation_reason"] = escalation_reason
+            trace_logger.warning(
+                f"Confidence below threshold, escalating",
+                confidence=state.get("confidence"),
+                reason=escalation_reason
+            )
+
     except Exception as e:
         trace_logger.error_occurred(
             error_type="response_composition_error",

@@ -39,6 +39,9 @@ def should_escalate(state: AgentState) -> str:
     """Conditional edge: decide if escalation is needed."""
     if state.get("escalated"):
         return "escalate"
+    # Check if tools need to be executed
+    if state.get("tools_to_use"):
+        return "tools"
     return "memory"
 
 
@@ -103,13 +106,10 @@ class AgentOrchestrator:
             should_escalate,
             {
                 "escalate": "escalate",
-                "memory": "memory"  # Skip tools if escalating
+                "tools": "tools",
+                "memory": "memory"
             }
         )
-
-        # If not escalating, check for tools
-        # NOTE: In production, this would be a more complex conditional
-        # For PoC, we have a simple check in should_use_tools
 
         workflow.add_edge("tools", "memory")
         workflow.add_edge("escalate", "memory")
